@@ -30,7 +30,9 @@ library(gridExtra)
 #   return(A/P)
 # }
 
-# New version
+# # New version
+
+# Calculation for pipe less than half full
 get_rh_lt_half <- function(D, wl) {
   r <- D/2
   h <- wl
@@ -40,6 +42,7 @@ get_rh_lt_half <- function(D, wl) {
   return(A/P)
 } 
 
+# Calculation for pipe greater than half full
 get_rh_gt_half <- function(D, wl) {
   r <- D/2
   h <- D-wl
@@ -49,6 +52,7 @@ get_rh_gt_half <- function(D, wl) {
   return(A/P)
 } 
 
+# Overall logic
 get_rh <- function(D, wl) {
   rh = case_when(
     between(wl, 0, D/2) ~ get_rh_lt_half(D, wl),
