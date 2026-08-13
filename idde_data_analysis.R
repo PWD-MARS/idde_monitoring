@@ -88,11 +88,12 @@ ggsave(paste0(loc, '/output/', loc, '_wl_response.png'), g)
 
 ## Do Fourier transform on data
 
-# Determine sampling period, length, and mean wl 
+# Determine sampling period, length, mean wl, and diurnal_freq
 samp_period_min <- as.numeric(difftime(mon_data$dtime[2], mon_data$dtime[1], units = 'mins'))
 samp_freq_per_min <- 1/samp_period_min
 N <- length(mon_data$dtime) 
 mean_wl <- mean(mon_data$wl_ft)
+target_freq_per_min <- 1/24/60 
 
 # Create data frame to hold results
 fft_data <- data.frame(matrix(ncol = 2, nrow = N))
@@ -112,7 +113,9 @@ ggplot(fft_data, aes(x = freq_per_min, y = amp_ft)) +
   xlab("Frequency (inverse minutes)") +
   ylab("Amplitude (ft)") +
   # Add dashed line at 24 hr period
-  geom_vline(xintercept = 1/24/60, color = 'red', linetype = 'longdash')
+  geom_vline(xintercept = target_freq_per_min, color = 'red', linetype = 'longdash') + 
+  annotate('text', x = target_freq_per_min, y = max(fft_data$amp_ft)*0.7, label = '\nDiurnal Frequency', color = 'red', angle = 90)
+ 
 ggsave(paste0(loc, '/output/', loc, '_fft_full.png'))
 
 # Replot with only lower frequencies
@@ -123,6 +126,7 @@ ggplot(fft_data, aes(x = freq_per_min, y = amp_ft)) +
   xlab("Frequency (inverse minutes)") +
   ylab("Amplitude (ft)") +
   # Add dashed line at 24 hr period
-  geom_vline(xintercept = 1/24/60, color = 'red', linetype = 'longdash')
+  geom_vline(xintercept = 1/24/60, color = 'red', linetype = 'longdash') + 
+annotate('text', x = target_freq_per_min, y = max(fft_data$amp_ft)*0.7, label = '\nDiurnal Frequency', color = 'red', angle = 90)
 ggsave(paste0(loc, '/output/', loc, '_fft_low_freq.png'))
   
